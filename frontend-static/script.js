@@ -1,6 +1,6 @@
 // **IMPORTANT**: You must replace this placeholder with the actual public URL 
 // of your Catalog Service (Web Service component) after deployment.
-const API_URL = "https://catalog-api-xyz.ondigitalocean.app/api/v1/products";
+const API_URL = "https://orca-app-cbmvq.ondigitalocean.app/api/v1/products";
 
 const productListDiv = document.getElementById('product-list');
 
