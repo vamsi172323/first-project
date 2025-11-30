@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce MVP | Catalog</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; background-color: #f4f4f4; }
+        h1 { color: #0069ff; text-align: center; }
+        #product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .product-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .product-card h2 { margin-top: 0; color: #333; }
+        .product-card .price { font-weight: bold; color: green; font-size: 1.2em; }
+        .product-card .stock { font-size: 0.9em; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>Microservices MVP Product Catalog</h1>
+    <div id="product-list">
+        <p>Loading products...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
