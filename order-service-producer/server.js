@@ -30,7 +30,10 @@ const kafka = new Kafka({
     clientId: 'order-service',
     brokers: KAFKA_BROKERS,
     // DigitalOcean Managed Kafka uses SASL/SCRAM authentication over TLS/SSL
-    ssl: true, 
+    ssl: { 
+        rejectUnauthorized: true, // Recommended for production
+        ca: [Buffer.from(KAFKA_CA_CERT)] // Use the certificate from the environment variable
+    },
     sasl: {
         mechanism: 'scram-sha-256', 
         username: KAFKA_USERNAME,
