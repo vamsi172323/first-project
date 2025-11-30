@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 8080;
 const KAFKA_BROKERS = process.env.KAFKA_BROKERS ? process.env.KAFKA_BROKERS.split(',') : ['localhost:9092'];
 const KAFKA_USERNAME = process.env.KAFKA_USERNAME;
 const KAFKA_PASSWORD = process.env.KAFKA_PASSWORD;
+const KAFKA_CA_CERT = process.env.KAFKA_CA_CERT;
 const KAFKA_TOPIC = 'raw_orders';
 
 // PostgreSQL Configuration
