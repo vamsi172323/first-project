@@ -1,5 +1,5 @@
 {
-  "name": "payment-service-worker",
+  "name": "order-finalizer-worker-service",
   "version": "1.0.0",
   "description": "Kafka consumer worker for finalizing order in the Saga pattern.",
   "main": "order-finalizer-worker.js",
