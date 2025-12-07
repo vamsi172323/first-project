@@ -47,6 +47,15 @@ const producer = kafka.producer({
     allowAutoTopicCreation: false // Ensure topic exists
 });
 
+const corsOptions = {
+    // Replace the placeholder with the actual URL of your deployed Frontend Service
+    // IMPORTANT: Do NOT include a trailing slash (e.g., /)
+    origin: 'https://frontend-app-8nidl.ondigitalocean.app
+', 
+    methods: 'GET,POST',
+    allowedHeaders: 'Content-Type',
+};
+
 // Connect to Kafka on startup
 async function connectKafka() {
     try {
@@ -60,6 +69,7 @@ async function connectKafka() {
 connectKafka();
 
 // --- Express Middleware & API Endpoint ---
+app.use(cors(corsOptions));
 app.use(express.json()); // for parsing application/json
 
 /**
