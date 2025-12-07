@@ -21,11 +21,12 @@ async function fetchAndRenderProducts() {
         productListElement.innerHTML = ''; // Clear previous content
 
         products.forEach(product => {
+            const priceDisplay = parseFloat(product.price).toFixed(2);
             const card = document.createElement('div');
             card.className = 'product-card';
             card.innerHTML = `
                 <h3>${product.name}</h3>
-                <p>Price: $${product.price.toFixed(2)}</p>
+                <p>Price: $${priceDisplay}</p>
                 <p>Stock: ${product.stock_quantity}</p>
                 <button 
                     data-product-id="${product.product_id}" 
