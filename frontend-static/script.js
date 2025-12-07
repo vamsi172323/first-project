@@ -1,8 +1,8 @@
 // --- CRITICAL CONFIGURATION ---
 // REPLACE WITH YOUR DEPLOYED CATALOG SERVICE URL
-const CATALOG_SERVICE_URL = 'https://catalog-service-abc.ondigitalocean.app/api/v1/products'; 
+const CATALOG_SERVICE_URL = 'https://orca-app-cbmvq.ondigitalocean.app/api/v1/products'; 
 // REPLACE WITH YOUR DEPLOYED ORDER SERVICE URL
-const ORDER_SERVICE_URL = 'https://order-service-abc.ondigitalocean.app/api/v1/orders/place'; 
+const ORDER_SERVICE_URL = 'https://plankton-app-e3aes.ondigitalocean.app/api/v1/orders/place'; 
 
 const productListElement = document.getElementById('product-list');
 const statusMessageElement = document.getElementById('order-status-message');
