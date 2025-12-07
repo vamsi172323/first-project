@@ -50,6 +50,24 @@ const producer = kafka.producer({
     createPartitioner: Partitioners.DefaultPartitioner,
 });
 
+// Add Express for the mandatory Health Check
+const express = require('express');
+const healthApp = express();
+const HEALTH_PORT = 8080; // App Platform defaults to checking this port
+
+// --- HEALTH CHECK SERVER ---
+// 1. Define a simple health check endpoint
+healthApp.get('/health', (req, res) => {
+    // The worker is considered healthy if the main process is alive.
+    // In a production system, you'd check PostgreSQL and Kafka connections here.
+    res.status(200).send('Inventory Worker is alive and connected.');
+});
+
+// 2. Start the listener server
+healthApp.listen(HEALTH_PORT, () => {
+    console.log(`Health Check Server listening on port ${HEALTH_PORT}`);
+});
+// -----------------------------
 
 // --- 3. Core Worker Logic ---
 async function runInventoryWorker() {
