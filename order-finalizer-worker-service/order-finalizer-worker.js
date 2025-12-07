@@ -2,13 +2,15 @@ const { Kafka, Partitioners } = require('kafkajs');
 const { Pool } = require('pg');
 
 // --- Configuration ---
-// (Requires all KAFKA_ and DB_ related environment variables)
-const KAFKA_BROKERS = process.env.KAFKA_BROKERS.split(',');
-// ... (KAFKA_USERNAME, KAFKA_PASSWORD, KAFKA_CA_CERT loaded as before)
 
-// PostgreSQL Configuration 
+
+// PostgreSQL Configuration (using the same config names as the Order Service)
 const DB_CONFIG = {
-    // ... (DB_HOST, DB_USER, DB_PASSWORD, etc. loaded as before)
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     ssl: { rejectUnauthorized: false } 
 };
 
@@ -20,16 +22,26 @@ const NO_STOCK_TOPIC = 'order_failed_no_stock'; // Also listen to inventory fail
 // Initialize Clients
 const pgPool = new Pool(DB_CONFIG);
 
-const KAFKA_CA_CERT = process.env.KAFKA_CA_CERT; 
+// Kafka Configuration
+const KAFKA_BROKERS = process.env.KAFKA_BROKERS ? process.env.KAFKA_BROKERS.split(',') : ['localhost:9092'];
+const KAFKA_USERNAME = process.env.KAFKA_USERNAME;
+const KAFKA_PASSWORD = process.env.KAFKA_PASSWORD;
+const KAFKA_CA_CERT = process.env.KAFKA_CA_CERT; // The secret certificate content
 
 const kafka = new Kafka({
-    // ...
+    clientId: 'order-finalizer-service',
+    brokers: KAFKA_BROKERS,
+    // CRITICAL: SSL configuration using the environment variable CA Cert
     ssl: { 
         rejectUnauthorized: true, 
-        // This line is the fix
         ca: KAFKA_CA_CERT ? [Buffer.from(KAFKA_CA_CERT)] : undefined 
     }, 
-    // ...
+    // SASL Authentication
+    sasl: {
+        mechanism: 'scram-sha-256', 
+        username: KAFKA_USERNAME,
+        password: KAFKA_PASSWORD,
+    }
 });
 
 const consumer = kafka.consumer({ groupId: 'order-finalizers' });
