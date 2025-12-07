@@ -20,12 +20,16 @@ const NO_STOCK_TOPIC = 'order_failed_no_stock'; // Also listen to inventory fail
 // Initialize Clients
 const pgPool = new Pool(DB_CONFIG);
 
+const KAFKA_CA_CERT = process.env.KAFKA_CA_CERT; 
+
 const kafka = new Kafka({
-    clientId: 'order-finalizer-service',
-    brokers: KAFKA_BROKERS,
-    // CRITICAL: SSL configuration using the environment variable CA Cert
-    ssl: { /* ... config using KAFKA_CA_CERT ... */ }, 
-    sasl: { /* ... config using KAFKA_USERNAME/PASSWORD ... */ }
+    // ...
+    ssl: { 
+        rejectUnauthorized: true, 
+        // This line is the fix
+        ca: KAFKA_CA_CERT ? [Buffer.from(KAFKA_CA_CERT)] : undefined 
+    }, 
+    // ...
 });
 
 const consumer = kafka.consumer({ groupId: 'order-finalizers' });
