@@ -4,8 +4,8 @@ const CATALOG_SERVICE_URL = 'https://orca-app-cbmvq.ondigitalocean.app/api/v1/pr
 // REPLACE WITH YOUR DEPLOYED ORDER SERVICE URL
 const ORDER_SERVICE_URL = 'https://plankton-app-e3aes.ondigitalocean.app/api/v1/orders/place'; 
 
-const productListElement = document.getElementById('product-list');
-const statusMessageElement = document.getElementById('order-status-message');
+let productListElement;
+let statusMessageElement;
 
 /**
  * Fetches products and renders them with an 'Order' button.
@@ -94,4 +94,12 @@ function handleOrderClick(button) {
 }
 
 // Initial call to load products when the page loads
-document.addEventListener('DOMContentLoaded', fetchAndRenderProducts);
+
+document.addEventListener('DOMContentLoaded', () => {
+    // CRITICAL: Initialize variables here, guaranteed to work after the DOM is loaded
+    productListElement = document.getElementById('product-list');
+    statusMessageElement = document.getElementById('order-status-message');
+    
+    // Now call the function that uses them
+    fetchAndRenderProducts();
+});
