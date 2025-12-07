@@ -4,7 +4,7 @@
   "description": "Kafka consumer worker for payment processing in the Saga pattern.",
   "main": "payment-worker.js",
   "scripts": {
-    "start": "node payment-worker.js"
+    "start": "order-finalizer-worker.js"
   },
   "dependencies": {
     "kafkajs": "^2.2.4",
