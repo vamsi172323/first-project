@@ -4,7 +4,7 @@
   "description": "Kafka consumer worker for finalizing order in the Saga pattern.",
   "main": "order-finalizer-worker.js",
   "scripts": {
-    "start": "order-finalizer-worker.js"
+    "start": "node order-finalizer-worker.js"
   },
   "dependencies": {
     "kafkajs": "^2.2.4",
