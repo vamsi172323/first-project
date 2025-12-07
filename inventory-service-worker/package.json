@@ -1,0 +1,13 @@
+{
+  "name": "inventory-service-worker",
+  "version": "1.0.0",
+  "description": "Kafka consumer worker for inventory deduction in the Saga pattern.",
+  "main": "inventory-worker.js",
+  "scripts": {
+    "start": "node inventory-worker.js"
+  },
+  "dependencies": {
+    "pg": "^8.11.3",
+    "kafkajs": "^2.2.4"
+  }
+}
