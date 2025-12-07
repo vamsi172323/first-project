@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { Pool } = require('pg');
 const { Kafka, Partitioners } = require('kafkajs');
 const { v4: uuidv4 } = require('uuid');
