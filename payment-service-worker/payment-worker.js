@@ -73,8 +73,8 @@ async function runPaymentWorker() {
                 console.log(`[START] Processing Payment for Order: ${orderId}. Amount: ${totalAmount}`);
 
                 // --- Payment Simulation (Task 4.3) ---
-                // Simulating a 10% chance of failure for testing the compensation path
-                if (Math.random() < 0.1) { 
+                // Simulating a 0.1% chance of failure for testing the compensation path
+                if (Math.random() < 0.001) { 
                     paymentSuccessful = false;
                     console.error(`[FAIL] Simulated payment failure for Order ${orderId}.`);
                 } 
