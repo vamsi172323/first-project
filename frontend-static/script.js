@@ -37,6 +37,7 @@ async function fetchProducts() {
                 <p>${product.description}</p>
                 <p class="price">$${product.price}</p>
                 <p class="stock">Category: ${product.category} | ${stockStatus}</p>
+                <button onclick="placeTestOrder()">Place Test Order (1 Unit)</button>
                 `;
             
             productListDiv.appendChild(card);
