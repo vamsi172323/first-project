@@ -50,8 +50,7 @@ const producer = kafka.producer({
 const corsOptions = {
     // Replace the placeholder with the actual URL of your deployed Frontend Service
     // IMPORTANT: Do NOT include a trailing slash (e.g., /)
-    origin: 'https://frontend-app-8nidl.ondigitalocean.app
-', 
+    origin: 'https://frontend-app-8nidl.ondigitalocean.app', 
     methods: 'GET,POST',
     allowedHeaders: 'Content-Type',
 };
