@@ -32,6 +32,25 @@ const producer = kafka.producer({
     createPartitioner: Partitioners.DefaultPartitioner,
 });
 
+// Add Express for the mandatory Health Check
+const express = require('express');
+const healthApp = express();
+const HEALTH_PORT = 8080; // App Platform defaults to checking this port
+
+// --- HEALTH CHECK SERVER ---
+// Define a simple health check endpoint
+healthApp.get('/health', (req, res) => {
+    // This confirms the worker process is alive
+    res.status(200).send('Payment Worker is alive.');
+});
+
+// Start the listener server
+healthApp.listen(HEALTH_PORT, () => {
+    console.log(`Health Check Server listening on port ${HEALTH_PORT}`);
+});
+// -----------------------------
+// ... Rest of the Kafka worker logic follows ...
+
 // --- 3. Core Worker Logic ---
 async function runPaymentWorker() {
     try {
