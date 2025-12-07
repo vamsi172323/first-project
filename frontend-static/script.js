@@ -1,53 +1,96 @@
-// **IMPORTANT**: You must replace this placeholder with the actual public URL 
-// of your Catalog Service (Web Service component) after deployment.
-const API_URL = "https://orca-app-cbmvq.ondigitalocean.app/api/v1/products";
+// --- CRITICAL CONFIGURATION ---
+// REPLACE WITH YOUR DEPLOYED CATALOG SERVICE URL
+const CATALOG_SERVICE_URL = 'https://catalog-service-abc.ondigitalocean.app/api/v1/products'; 
+// REPLACE WITH YOUR DEPLOYED ORDER SERVICE URL
+const ORDER_SERVICE_URL = 'https://order-service-abc.ondigitalocean.app/api/v1/orders/place'; 
 
-const productListDiv = document.getElementById('product-list');
+const productListElement = document.getElementById('product-list');
+const statusMessageElement = document.getElementById('order-status-message');
 
-async function fetchProducts() {
+/**
+ * Fetches products and renders them with an 'Order' button.
+ */
+async function fetchAndRenderProducts() {
     try {
-        const response = await fetch(API_URL);
-        
-        // Handle HTTP errors (e.g., 404, 500)
+        const response = await fetch(CATALOG_SERVICE_URL);
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
         const products = await response.json();
         
-        // Clear the loading message
-        productListDiv.innerHTML = ''; 
+        productListElement.innerHTML = ''; // Clear previous content
 
-        if (products.length === 0) {
-            productListDiv.innerHTML = '<p>No products found in the catalog.</p>';
-            return;
-        }
-
-        // Loop through the data and render a card for each product
         products.forEach(product => {
             const card = document.createElement('div');
             card.className = 'product-card';
-            
-            const stockStatus = product.stock_quantity > 0 
-                ? `In Stock: ${product.stock_quantity}` 
-                : 'Out of Stock';
-
             card.innerHTML = `
-                <h2>${product.name}</h2>
-                <p>${product.description}</p>
-                <p class="price">$${product.price}</p>
-                <p class="stock">Category: ${product.category} | ${stockStatus}</p>
-                <button onclick="placeTestOrder()">Place Test Order (1 Unit)</button>
-                `;
-            
-            productListDiv.appendChild(card);
+                <h3>${product.name}</h3>
+                <p>Price: $${product.price.toFixed(2)}</p>
+                <p>Stock: ${product.stock_quantity}</p>
+                <button 
+                    data-product-id="${product.product_id}" 
+                    data-product-name="${product.name}" 
+                    data-price="${product.price}"
+                    onclick="handleOrderClick(this)">
+                    Order 1 Unit
+                </button>
+            `;
+            productListElement.appendChild(card);
         });
 
     } catch (error) {
-        console.error("Error fetching products:", error);
-        productListDiv.innerHTML = `<p style="color: red;">Failed to load catalog. Check API URL and service status.</p>`;
+        productListElement.innerHTML = `<p style="color: red;">Failed to load products: ${error.message}</p>`;
     }
 }
 
-// Execute the function when the page loads
-fetchProducts();
+/**
+ * Handles the click event on the order button and initiates the Saga via the Order Service API.
+ * @param {HTMLElement} button - The clicked button element.
+ */
+function handleOrderClick(button) {
+    const productId = button.getAttribute('data-product-id');
+    const productName = button.getAttribute('data-product-name');
+    const unitPrice = parseFloat(button.getAttribute('data-price'));
+    const quantity = 1; // Always order 1 unit for testing
+
+    statusMessageElement.textContent = `Placing order for ${productName}... Saga starting.`;
+    statusMessageElement.style.color = 'orange';
+    
+    const orderData = {
+        userId: "11223344-5566-7788-99aa-bbccddeeff00", // Hardcoded test user ID
+        totalAmount: unitPrice * quantity,
+        items: [
+            { 
+                productId: productId, 
+                productName: productName, 
+                unitPrice: unitPrice, 
+                quantity: quantity 
+            }
+        ]
+    };
+
+    fetch(ORDER_SERVICE_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+    })
+    .then(response => {
+        if (response.status === 202) {
+            statusMessageElement.textContent = `Order accepted (202) for ${productName}. Check worker logs for final status.`;
+            statusMessageElement.style.color = 'green';
+        } else {
+            statusMessageElement.textContent = `Order placement failed. Status: ${response.status}`;
+            statusMessageElement.style.color = 'red';
+        }
+    })
+    .catch(error => {
+        console.error('Error placing order:', error);
+        statusMessageElement.textContent = `Error connecting to Order Service.`;
+        statusMessageElement.style.color = 'red';
+    });
+}
+
+// Initial call to load products when the page loads
+document.addEventListener('DOMContentLoaded', fetchAndRenderProducts);
