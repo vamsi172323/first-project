@@ -54,6 +54,14 @@ function handleOrderClick(button) {
     const unitPrice = parseFloat(button.getAttribute('data-price'));
     const quantity = 1; // Always order 1 unit for testing
 
+    // Check if the parsing failed (results in NaN)
+    if (isNaN(unitPrice)) {
+        console.error('Failed to parse price:', priceAttribute);
+        statusMessageElement.textContent = 'Error: Cannot read product price.';
+        statusMessageElement.style.color = 'red';
+        return;
+    }
+
     statusMessageElement.textContent = `Placing order for ${productName}... Saga starting.`;
     statusMessageElement.style.color = 'orange';
     
